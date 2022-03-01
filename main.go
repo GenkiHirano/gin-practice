@@ -8,7 +8,7 @@ import (
 func main() {
 	r := gin.Default()
 
-	r.POST("/user", handler.CreateUser)
+	r.POST("/user", handler.CreateUser())
 
 	r.Run()
 }

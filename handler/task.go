@@ -19,23 +19,24 @@ type responseUser struct {
 	Comment string `json:"comment"`
 }
 
-func CreateUser(c *gin.Context) {
+func CreateUser() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var req requestUser
+		if err := c.Bind(&req); err != nil {
+			c.JSON(http.StatusBadRequest, err.Error())
+		}
 
-	var req requestUser
-	if err := c.Bind(&req); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		createdUser, err := repository.Create(req.ID, req.Name, req.Comment)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, err.Error())
+		}
+
+		res := responseUser{
+			ID:      createdUser.ID,
+			Name:    createdUser.Name,
+			Comment: createdUser.Comment,
+		}
+
+		c.JSON(http.StatusCreated, res)
 	}
-
-	createdUser, err := repository.Create(req.ID, req.Name, req.Comment)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
-	}
-
-	res := responseUser{
-		ID:      createdUser.ID,
-		Name:    createdUser.Name,
-		Comment: createdUser.Comment,
-	}
-
-	c.JSON(http.StatusCreated, res)
 }
