@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/GenkiHirano/gin-practice/repository"
 	"github.com/gin-gonic/gin"
@@ -10,13 +11,14 @@ import (
 type requestUser struct {
 	ID      int    `json:"id"`
 	Name    string `json:"name"`
-	Comment string `json:"comment"`
+	Comment string `json:"comment" binding:"required,max=10"`
 }
 
 type responseUser struct {
-	ID      int    `json:"id"`
-	Name    string `json:"name"`
-	Comment string `json:"comment"`
+	ID        int       `json:"id"`
+	Name      string    `json:"name"`
+	Comment   string    `json:"comment"`
+	CreatedAt time.Time `json:"createdAt"`
 }
 
 func CreateUser() gin.HandlerFunc {
@@ -32,9 +34,10 @@ func CreateUser() gin.HandlerFunc {
 		}
 
 		res := responseUser{
-			ID:      createdUser.ID,
-			Name:    createdUser.Name,
-			Comment: createdUser.Comment,
+			ID:        createdUser.ID,
+			Name:      createdUser.Name,
+			Comment:   createdUser.Comment,
+			CreatedAt: createdUser.CreatedAt,
 		}
 
 		c.JSON(http.StatusCreated, res)

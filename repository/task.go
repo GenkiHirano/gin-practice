@@ -12,9 +12,10 @@ func Create(id int, name, comment string) (*model.User, error) {
 	}
 
 	newUser := &model.User{
-		ID:      user.ID,
-		Name:    user.Name,
-		Comment: user.Comment,
+		ID:        user.ID,
+		Name:      user.Name,
+		Comment:   user.Comment,
+		CreatedAt: user.CreatedAt,
 	}
 
 	return newUser, nil
