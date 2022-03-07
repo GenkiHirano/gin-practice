@@ -8,15 +8,18 @@ import (
 
 // Create userの作成
 func Create(id int, name, comment string) (*model.User, error) {
-	user, err := model.NewUser(id, name, comment)
-	if err != nil {
-		return nil, err
+	if id == 0 {
+		return nil, errors.New("idを入力してください")
+	}
+
+	if name == "" {
+		return nil, errors.New("nameを入力してください")
 	}
 
 	newUser := &model.User{
-		ID:      user.ID,
-		Name:    user.Name,
-		Comment: user.Comment,
+		ID:      id,
+		Name:    name,
+		Comment: comment,
 	}
 
 	return newUser, nil
